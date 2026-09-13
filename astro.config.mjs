@@ -2,10 +2,16 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Update `site` to the production domain before deploying — it drives the
-// canonical URL, Open Graph URLs and the sitemap.
+// Published on GitHub Pages at https://karzhinn.github.io/cooler-portfolio/
+// `site` drives the canonical URL, Open Graph URLs and the sitemap; `base` must
+// match the repository name. If you rename the repo, update `base`. If you add a
+// custom domain (public/CNAME), set `site` to that domain and remove `base`.
 export default defineConfig({
-  site: 'https://karzhinkamal.com',
+  site: 'https://karzhinn.github.io',
+  base: '/cooler-portfolio',
+  // GitHub Pages serves folders with a trailing slash; match it so the sitemap
+  // and canonical URL list each page exactly once.
+  trailingSlash: 'always',
   integrations: [sitemap()],
   compressHTML: true,
   devToolbar: { enabled: false },
