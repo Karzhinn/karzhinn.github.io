@@ -1,0 +1,27 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment
+.env
+.env.*
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# raw, unprocessed source photos (optimised copies live in src/assets)
+_source/
+
+photo_5269322301625277185_y.jpg
+README.md
+.claude
+.agents

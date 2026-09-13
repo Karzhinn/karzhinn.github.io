@@ -1,0 +1,307 @@
+---
+import { projects } from '../data/site';
+import ProjectVisual from './ProjectVisual.astro';
+---
+
+<section class="section projects" id="projects" aria-labelledby="projects-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow" data-reveal="up"><span class="eyebrow-index">03</span>Projects</p>
+      <h2 class="h2" id="projects-title" data-reveal="blur">Selected work.</h2>
+      <p class="lead" data-reveal="up">
+        Two mobile apps I built from the ground up, and a digital library for the Kurdistan Women’s Union.
+      </p>
+    </header>
+  </div>
+
+  <div class="project-list container-wide">
+    {
+      projects.map((project) => (
+        <article class={`project project-${project.id}`} aria-labelledby={`project-${project.id}-title`}>
+          <div class="project-visual" data-project-visual data-cursor="card">
+            <ProjectVisual kind={project.id} />
+            <span class="project-chip glass">{project.label}</span>
+          </div>
+
+          <div class="project-info">
+            <div class="project-heading" data-reveal="up">
+              <p class="project-index">
+                {project.index}
+                <span aria-hidden="true">·</span>
+                {project.kind}
+              </p>
+              <h3 class="project-title" id={`project-${project.id}-title`}>
+                {project.title}
+              </h3>
+              <p class="project-tagline">{project.tagline}</p>
+            </div>
+
+            <div class="project-detail">
+              <p class="project-desc" data-reveal="up">
+                {project.description}
+              </p>
+
+              <dl class="project-meta" data-reveal="up">
+                {project.meta.map((row) => (
+                  <div>
+                    <dt>{row.label}</dt>
+                    <dd>{row.value}</dd>
+                  </div>
+                ))}
+                {project.highlights && (
+                  <div>
+                    <dt>Highlights</dt>
+                    <dd>
+                      <ul class="highlights" role="list">
+                        {project.highlights.map((highlight) => (
+                          <li>{highlight}</li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+
+              <div class="project-actions" data-reveal="up">
+                <a
+                  class="btn btn-glass glass project-link"
+                  href={project.link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-magnetic
+                >
+                  {project.link.label}
+                  <svg class="link-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M5 11 11 5m0 0H6m5 0v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="visually-hidden">(opens in a new tab)</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .project-list {
+    display: grid;
+    gap: clamp(6rem, 12vw, 11rem);
+  }
+
+  .project {
+    display: grid;
+    gap: clamp(2.25rem, 4vw, 3.75rem);
+  }
+
+  /* ---------- visual ---------- */
+  .project-visual {
+    position: relative;
+    isolation: isolate;
+    container-type: inline-size;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: clamp(24px, 3vw, 44px);
+    background: var(--visual-bg);
+    box-shadow:
+      inset 0 1px 0 var(--glass-inset-hi),
+      0 0 0 1px var(--line);
+    perspective: 1600px;
+    transform-origin: 50% 100%;
+  }
+
+  .project-zman {
+    --visual-bg: radial-gradient(120% 95% at 70% 0%, #ffffff 0%, #eeecfb 46%, #e2def6 100%);
+  }
+
+  .project-mind {
+    --visual-bg: radial-gradient(120% 95% at 50% 0%, #ffffff 0%, #eaf3f0 46%, #dbe9e5 100%);
+  }
+
+  .project-library {
+    --visual-bg: radial-gradient(120% 95% at 30% 0%, #ffffff 0%, #f3edf7 46%, #e8e0ef 100%);
+  }
+
+  :global([data-theme='dark']) .project-zman {
+    --visual-bg: radial-gradient(120% 95% at 70% 0%, #25213d 0%, #15132a 52%, #0d0c16 100%);
+  }
+
+  :global([data-theme='dark']) .project-mind {
+    --visual-bg: radial-gradient(120% 95% at 50% 0%, #1b2a27 0%, #111a19 52%, #0b0f0e 100%);
+  }
+
+  :global([data-theme='dark']) .project-library {
+    --visual-bg: radial-gradient(120% 95% at 30% 0%, #272031 0%, #17131e 52%, #0e0c12 100%);
+  }
+
+  /* A slow specular sweep on hover. */
+  .project-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.3) 47%, rgb(255 255 255 / 0.06) 53%, transparent 62%);
+    background-size: 250% 100%;
+    background-position: 130% 0;
+    opacity: 0;
+    transition:
+      background-position 1400ms var(--ease-out),
+      opacity 600ms var(--ease-out);
+  }
+
+  :global([data-theme='dark']) .project-visual::after {
+    background-image: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.09) 47%, rgb(255 255 255 / 0.02) 53%, transparent 62%);
+  }
+
+  .project-visual:hover::after {
+    opacity: 1;
+    background-position: -30% 0;
+  }
+
+  .project-chip {
+    position: absolute;
+    top: clamp(0.9rem, 2vw, 1.5rem);
+    left: clamp(0.9rem, 2vw, 1.5rem);
+    z-index: 3;
+    padding: 0.45rem 0.9rem;
+    border-radius: var(--r-pill);
+    font-size: var(--fs-micro);
+    font-weight: 560;
+    color: var(--text-2);
+    --glass-blur: 14px;
+  }
+
+  /* ---------- info ---------- */
+  .project-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(1.75rem, 5vw, 5rem);
+    padding-inline: clamp(0rem, 2.5vw, 2.5rem);
+  }
+
+  .project-index {
+    display: flex;
+    gap: 0.5rem;
+    font-size: var(--fs-micro);
+    font-weight: 560;
+    color: var(--text-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-title {
+    margin-top: 0.85rem;
+    font-size: clamp(2.1rem, 1.2rem + 3.1vw, 4rem);
+    font-weight: 630;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .project-tagline {
+    margin-top: 0.9rem;
+    font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.3rem);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--text-2);
+  }
+
+  .project-desc {
+    font-size: var(--fs-lead);
+    line-height: 1.45;
+    letter-spacing: -0.014em;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  .project-meta {
+    display: grid;
+    margin-top: 2rem;
+  }
+
+  .project-meta > div {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .project-meta dt {
+    padding-top: 0.12rem;
+    font-size: var(--fs-micro);
+    font-weight: 560;
+    color: var(--text-3);
+  }
+
+  .project-meta dd {
+    font-size: var(--fs-small);
+    color: var(--text-2);
+    text-wrap: pretty;
+  }
+
+  .highlights {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .highlights li {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+
+  .highlights li::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-3);
+  }
+
+  .project-actions {
+    margin-top: 1.75rem;
+  }
+
+  .link-icon {
+    width: 0.95em;
+    height: 0.95em;
+    transition: translate var(--dur) var(--ease-out);
+  }
+
+  .project-link:hover .link-icon {
+    translate: 2px -2px;
+  }
+
+  @media (max-width: 880px) {
+    .project-info {
+      grid-template-columns: minmax(0, 1fr);
+      padding-inline: 0.25rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .project-visual {
+      aspect-ratio: 4 / 5;
+    }
+
+    .project-chip {
+      padding: 0.32rem 0.7rem;
+      font-size: 0.72rem;
+    }
+
+    .project-meta > div {
+      grid-template-columns: 5.25rem minmax(0, 1fr);
+    }
+
+    .project-link {
+      width: 100%;
+      white-space: normal;
+      text-align: center;
+    }
+  }
+</style>

@@ -1,0 +1,87 @@
+<div class="cursor" data-cursor-root data-state="default" aria-hidden="true">
+  <div class="cursor-ring" data-cursor-ring><span></span></div>
+  <div class="cursor-dot" data-cursor-dot><span></span></div>
+</div>
+
+<style>
+  .cursor {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms var(--ease-out);
+    mix-blend-mode: difference;
+  }
+
+  .cursor.is-visible {
+    opacity: 1;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    will-change: transform;
+  }
+
+  .cursor-dot span,
+  .cursor-ring span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    border-radius: 50%;
+    translate: -50% -50%;
+  }
+
+  .cursor-dot span {
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    transition:
+      scale 300ms var(--ease-out),
+      opacity 300ms var(--ease-out);
+  }
+
+  .cursor-ring span {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgb(255 255 255 / 0.55);
+    transition:
+      width 480ms var(--ease-spring),
+      height 480ms var(--ease-spring),
+      background-color 300ms var(--ease-out),
+      border-color 300ms var(--ease-out),
+      scale 220ms var(--ease-out),
+      opacity 300ms var(--ease-out);
+  }
+
+  .cursor[data-state='link'] .cursor-ring span {
+    width: 52px;
+    height: 52px;
+    background: rgb(255 255 255 / 0.12);
+    border-color: rgb(255 255 255 / 0.3);
+  }
+
+  .cursor[data-state='link'] .cursor-dot span {
+    scale: 0;
+  }
+
+  .cursor[data-state='card'] .cursor-ring span {
+    width: 84px;
+    height: 84px;
+    background: rgb(255 255 255 / 0.08);
+    border-color: rgb(255 255 255 / 0.4);
+  }
+
+  .cursor[data-state='hidden'] .cursor-ring span,
+  .cursor[data-state='hidden'] .cursor-dot span {
+    opacity: 0;
+  }
+
+  .cursor.is-pressed .cursor-ring span {
+    scale: 0.82;
+  }
+</style>

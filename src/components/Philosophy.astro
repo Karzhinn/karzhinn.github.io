@@ -1,0 +1,199 @@
+---
+import { principles } from '../data/site';
+
+// Words wrapped in *asterisks* get the metallic emphasis.
+const statement = 'I care about how software *works*, and how it *feels*.';
+const words = statement.split(' ').map((raw) => ({ text: raw.replaceAll('*', ''), em: raw.includes('*') }));
+---
+
+<section class="philosophy" id="design" aria-labelledby="design-title">
+  <div class="stage" data-stage>
+    <div class="stage-glow" aria-hidden="true"></div>
+    <div class="container stage-inner">
+      <p class="eyebrow" data-reveal="up"><span class="eyebrow-index">05</span>Design</p>
+
+      <h2 class="statement" id="design-title" data-statement>
+        {
+          words.map((word) => (
+            <>
+              <span class:list={['word', { 'word-em': word.em }]} data-word>
+                {word.text}
+              </span>{' '}
+            </>
+          ))
+        }
+      </h2>
+
+      <p class="stage-lead" data-reveal="up">
+        Good engineering makes software dependable. Good design makes it worth using. I want both in everything I
+        ship, so I pay attention to the details on both sides of the screen.
+      </p>
+
+      <ol class="principles" role="list">
+        {
+          principles.map((principle, i) => (
+            <li class="principle" data-reveal="up">
+              <span class="p-num">0{i + 1}</span>
+              <h3 class="p-title">{principle.title}</h3>
+              <p class="p-body">{principle.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .philosophy {
+    position: relative;
+    z-index: 1;
+    padding: clamp(2rem, 5vw, 4rem) clamp(0.5rem, 1.4vw, 1.25rem);
+  }
+
+  .stage {
+    --focus-ring: #f4f4f6;
+    --text: var(--stage-text);
+    --text-2: var(--stage-text-2);
+    --text-3: #6d6d76;
+    --line: var(--stage-line);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(6rem, 12vw, 11rem);
+    border-radius: clamp(28px, 4vw, 56px);
+    background: var(--stage-bg);
+    color: var(--stage-text);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 40px 80px -50px rgb(0 0 0 / 0.5);
+    transform-origin: 50% 0%;
+  }
+
+  :global([data-theme='dark']) .stage {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 0 0 1px rgb(255 255 255 / 0.06);
+  }
+
+  .stage-glow {
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    z-index: -1;
+    width: min(1100px, 120%);
+    aspect-ratio: 1.6;
+    translate: -50% 0;
+    background: radial-gradient(closest-side, rgb(200 210 235 / 0.16), rgb(200 210 235 / 0.04) 60%, transparent);
+    animation: glow 14s var(--ease-in-out) infinite alternate;
+  }
+
+  @keyframes glow {
+    to {
+      translate: -42% 6%;
+      scale: 1.12;
+    }
+  }
+
+  .stage-inner {
+    position: relative;
+  }
+
+  .statement {
+    max-width: 15ch;
+    margin-top: 1.75rem;
+    font-size: clamp(2.6rem, 1.1rem + 6.2vw, 7.5rem);
+    font-weight: 630;
+    line-height: 0.98;
+    letter-spacing: -0.052em;
+    text-wrap: balance;
+  }
+
+  :global(.motion) .word {
+    opacity: 0.14;
+  }
+
+  .word-em {
+    background: linear-gradient(180deg, #ffffff 0%, #e6e6ec 45%, #9e9ea9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .stage-lead {
+    max-width: 44ch;
+    margin-top: clamp(2rem, 3vw, 2.75rem);
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    letter-spacing: -0.012em;
+    color: var(--stage-text-2);
+    text-wrap: pretty;
+  }
+
+  .principles {
+    margin-top: clamp(4rem, 8vw, 7rem);
+    border-top: 1px solid var(--stage-line);
+  }
+
+  .principle {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 1.35fr);
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-block: clamp(1.35rem, 2.4vw, 2.1rem);
+    border-bottom: 1px solid var(--stage-line);
+  }
+
+  .principle::before {
+    content: '';
+    position: absolute;
+    inset: 0 -1.5rem;
+    z-index: -1;
+    border-radius: var(--r-md);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.045) 30%, rgb(255 255 255 / 0.045) 70%, transparent);
+    opacity: 0;
+    transition: opacity 500ms var(--ease-out);
+  }
+
+  .principle:hover::before {
+    opacity: 1;
+  }
+
+  .p-num {
+    font-size: var(--fs-micro);
+    font-weight: 560;
+    color: var(--stage-text-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .p-title {
+    font-size: clamp(1.4rem, 1rem + 1.35vw, 2.15rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    transition: translate 600ms var(--ease-out);
+  }
+
+  .principle:hover .p-title {
+    translate: 8px 0;
+  }
+
+  .p-body {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--stage-text-2);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 760px) {
+    .principle {
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      gap: 0.5rem 1rem;
+    }
+
+    .p-body {
+      grid-column: 2;
+    }
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import FluidCanvas from '../components/FluidCanvas.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Stack from '../components/Stack.astro';
+import Philosophy from '../components/Philosophy.astro';
+import Future from '../components/Future.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import Cursor from '../components/Cursor.astro';
+---
+
+<Base>
+  <FluidCanvas />
+  <Nav />
+  <main id="main">
+    <Hero />
+    <About />
+    <Experience />
+    <Projects />
+    <Stack />
+    <Philosophy />
+    <Future />
+    <Contact />
+  </main>
+  <Footer />
+  <Cursor />
+</Base>
+
+<script>
+  import '../scripts/app';
+</script>

@@ -1,0 +1,127 @@
+---
+import { stack } from '../data/site';
+
+const driftWords = stack.flatMap((group) => group.items).filter((item) => item !== 'Web Development');
+const driftLine = [...driftWords, ...driftWords].join('  ·  ');
+---
+
+<section class="section stack" id="stack" aria-labelledby="stack-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow" data-reveal="up"><span class="eyebrow-index">04</span>Stack</p>
+      <h2 class="h2" id="stack-title" data-reveal="blur">The tools behind the work.</h2>
+      <p class="lead" data-reveal="up">
+        A focused toolkit that covers the whole product: backend services and data, mobile and web, and the design
+        work that ties them together.
+      </p>
+    </header>
+  </div>
+
+  <div class="drift" aria-hidden="true" data-drift-wrap>
+    <p class="drift-line" data-drift>{driftLine}</p>
+  </div>
+
+  <div class="container">
+    <div class="stack-grid">
+      {
+        stack.map((group, i) => (
+          <div class="stack-group" data-reveal="up">
+            <h3 class="stack-group-title">
+              <span class="stack-num">0{i + 1}</span>
+              {group.group}
+            </h3>
+            <ul class="stack-items" role="list">
+              {group.items.map((item) => (
+                <li class="stack-item">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .drift {
+    overflow: hidden;
+    margin-block: clamp(-1rem, -1vw, 0rem) clamp(3rem, 6vw, 5rem);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .drift-line {
+    font-size: clamp(4.5rem, 2rem + 10vw, 12rem);
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line-2);
+    will-change: transform;
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .stack-group {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-2);
+  }
+
+  .stack-group-title {
+    display: flex;
+    gap: 0.75rem;
+    font-size: var(--fs-micro);
+    font-weight: 560;
+    letter-spacing: 0.005em;
+    color: var(--text-2);
+  }
+
+  .stack-num {
+    color: var(--text-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stack-items {
+    display: grid;
+    gap: 0.2rem;
+    margin-top: 1.5rem;
+  }
+
+  .stack-item {
+    font-size: clamp(1.35rem, 1rem + 1.1vw, 2rem);
+    font-weight: 570;
+    line-height: 1.3;
+    letter-spacing: -0.032em;
+    transition:
+      opacity 400ms var(--ease-out),
+      translate 500ms var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .stack-group:hover .stack-item {
+      opacity: 0.35;
+    }
+
+    .stack-group .stack-item:hover {
+      opacity: 1;
+      translate: 6px 0;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .stack-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .stack-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

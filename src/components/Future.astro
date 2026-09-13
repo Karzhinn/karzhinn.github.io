@@ -1,0 +1,160 @@
+---
+const interests = ['Emerging tech', 'New frameworks', 'Interaction design', 'Mobile & web'];
+---
+
+<section class="section future" id="now" aria-labelledby="future-title">
+  <div class="container future-grid">
+    <div class="future-copy">
+      <p class="eyebrow" data-reveal="up"><span class="eyebrow-index">06</span>Now</p>
+      <h2 class="h-display future-title" id="future-title">
+        <span class="line-mask"><span data-line>Always learning.</span></span>
+        <span class="line-mask"><span class="future-soft" data-line>Always building.</span></span>
+      </h2>
+      <p class="lead future-lead" data-reveal="up">
+        I like staying close to what’s next. I try new frameworks, languages and tools early, build small things
+        with them, and keep whatever earns a place in my work.
+      </p>
+      <ul class="interests" role="list" data-reveal="up">
+        {interests.map((interest) => <li class="interest glass">{interest}</li>)}
+      </ul>
+    </div>
+
+    <div class="orbit-wrap" aria-hidden="true">
+      <div class="orbit" data-orbit>
+        <div class="ring ring-1"><i></i></div>
+        <div class="ring ring-2"><i></i></div>
+        <div class="ring ring-3"><i></i></div>
+        <div class="core"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .future-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+
+  .future-title {
+    margin-top: 1.5rem;
+    font-size: clamp(2.6rem, 1rem + 4.6vw, 5.5rem);
+  }
+
+  .future-soft {
+    color: var(--text-3);
+  }
+
+  .future-lead {
+    max-width: 40ch;
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2.25rem;
+  }
+
+  .interest {
+    padding: 0.55rem 1rem;
+    border-radius: var(--r-pill);
+    font-size: var(--fs-small);
+    font-weight: 540;
+    color: var(--text-2);
+    --glass-blur: 12px;
+  }
+
+  /* ---------- orbit ---------- */
+  .orbit-wrap {
+    display: grid;
+    place-items: center;
+    perspective: 1400px;
+  }
+
+  .orbit {
+    position: relative;
+    width: min(100%, 500px);
+    aspect-ratio: 1;
+    transform-style: preserve-3d;
+  }
+
+  .ring {
+    --plane: rotateX(72deg);
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+    transform-style: preserve-3d;
+    transform: var(--plane) rotateZ(0deg);
+    animation: orbit 38s linear infinite;
+  }
+
+  .ring-2 {
+    --plane: rotateY(74deg) rotateX(12deg);
+    inset: 9%;
+    animation-duration: 30s;
+    animation-direction: reverse;
+  }
+
+  .ring-3 {
+    --plane: rotateX(64deg) rotateY(58deg);
+    inset: 18%;
+    animation-duration: 24s;
+  }
+
+  @keyframes orbit {
+    to {
+      transform: var(--plane) rotateZ(360deg);
+    }
+  }
+
+  .ring i {
+    position: absolute;
+    top: -5px;
+    left: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff, #c9c9d2 60%, #8b8b96);
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--text) 5%, transparent),
+      0 0 18px 2px rgb(180 195 230 / 0.55);
+  }
+
+  .core {
+    position: absolute;
+    inset: 33%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 28%, #ffffff 0%, #eeeef2 22%, #c4c4cc 58%, #8e8e99 100%);
+    box-shadow:
+      inset -12px -16px 32px rgb(0 0 0 / 0.16),
+      inset 10px 12px 24px rgb(255 255 255 / 0.7),
+      0 40px 70px -30px rgb(20 20 40 / 0.45);
+  }
+
+  :global([data-theme='dark']) .core {
+    background: radial-gradient(circle at 34% 28%, #6c6c76 0%, #3a3a41 30%, #1a1a1e 70%, #0d0d10 100%);
+    box-shadow:
+      inset -12px -16px 32px rgb(0 0 0 / 0.5),
+      inset 8px 10px 20px rgb(255 255 255 / 0.1),
+      0 40px 80px -30px rgb(0 0 0 / 0.9);
+  }
+
+  @media (max-width: 880px) {
+    .future-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .orbit-wrap {
+      order: -1;
+    }
+
+    .orbit {
+      width: min(72vw, 340px);
+    }
+  }
+</style>

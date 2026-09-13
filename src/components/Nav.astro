@@ -1,0 +1,357 @@
+---
+import { nav, site } from '../data/site';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="nav-shell" data-nav>
+  <nav class="nav glass" aria-label="Primary">
+    <a class="nav-brand" href="#top" aria-label={`${site.name}, back to top`}>
+      <span class="brand-mark" aria-hidden="true">KK</span>
+      <span class="brand-name" aria-hidden="true">{site.name}</span>
+    </a>
+
+    <div class="nav-links" data-nav-links>
+      <span class="nav-indicator" data-nav-indicator aria-hidden="true"></span>
+      <ul role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a class="nav-link" href={item.href} data-nav-link={item.href.slice(1)}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="nav-actions">
+      <ThemeToggle />
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-btn>
+        <span class="visually-hidden" data-menu-label>Open menu</span>
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu glass" id="mobile-menu" data-mobile-menu hidden>
+    <ul role="list">
+      {
+        nav.map((item, i) => (
+          <li style={`--i: ${i}`}>
+            <a href={item.href} data-menu-link>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="mobile-menu-mail" href={`mailto:${site.email}`}>{site.email}</a>
+  </div>
+</header>
+
+<style>
+  .nav-shell {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    padding-inline: 12px;
+    pointer-events: none;
+  }
+
+  .nav {
+    --glass-blur: 26px;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: var(--nav-h);
+    padding: 0 8px;
+    border-radius: var(--r-pill);
+    transition:
+      box-shadow var(--dur-slow) var(--ease-out),
+      background var(--dur-slow) var(--ease-out);
+  }
+
+  /* Hidden until the intro animation brings it in (see scripts/motion.ts). */
+  :global(.motion) .nav {
+    opacity: 0;
+  }
+
+  .nav-shell.is-scrolled .nav {
+    --glass-tint-top: color-mix(in srgb, var(--bg-raised) 82%, transparent);
+    --glass-tint-bottom: color-mix(in srgb, var(--bg-raised) 64%, transparent);
+  }
+
+  /* Over the inverted (dark) feature band the bar switches to dark glass. */
+  .nav-shell.on-dark .nav {
+    --glass-tint-top: rgb(46 46 52 / 0.62);
+    --glass-tint-bottom: rgb(24 24 28 / 0.5);
+    --glass-border: rgb(255 255 255 / 0.1);
+    --glass-inset-hi: rgb(255 255 255 / 0.14);
+    --glass-inset-lo: rgb(0 0 0 / 0.3);
+    --glass-rim-hi: rgb(255 255 255 / 0.3);
+    --glass-rim-lo: rgb(255 255 255 / 0.04);
+    --glass-sheen: rgb(255 255 255 / 0.14);
+    --glass-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.6);
+    --text: #f4f4f6;
+    --text-2: #a4a4ac;
+    --line: rgb(255 255 255 / 0.1);
+    --metal-soft: linear-gradient(145deg, #2b2b30 0%, #19191c 42%, #0f0f11 68%, #242428 100%);
+    --indicator-bg: rgb(255 255 255 / 0.12);
+    color: var(--text);
+  }
+
+  /* Brand */
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 8px 0 4px;
+    border-radius: var(--r-pill);
+  }
+
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--metal-soft);
+    box-shadow:
+      inset 0 1px 0 var(--glass-inset-hi),
+      inset 0 0 0 1px var(--line),
+      0 2px 6px -2px rgb(0 0 0 / 0.18);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--text);
+  }
+
+  .brand-name {
+    max-width: 8.5rem;
+    overflow: hidden;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    white-space: nowrap;
+    transition:
+      max-width 640ms var(--ease-out),
+      opacity 400ms var(--ease-out);
+  }
+
+  .nav-shell.is-condensed .brand-name {
+    max-width: 0;
+    opacity: 0;
+  }
+
+  /* Links + sliding indicator */
+  .nav-links {
+    position: relative;
+  }
+
+  .nav-links ul {
+    display: flex;
+    gap: 2px;
+  }
+
+  .nav-link {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: var(--r-pill);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text-2);
+    transition: color var(--dur) var(--ease-out);
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current='true'] {
+    color: var(--text);
+  }
+
+  .nav-indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: var(--w, 0px);
+    height: 40px;
+    border-radius: var(--r-pill);
+    background: var(--indicator-bg, rgb(255 255 255 / 0.95));
+    box-shadow:
+      inset 0 1px 0 var(--glass-inset-hi),
+      0 1px 2px rgb(0 0 0 / 0.06),
+      0 4px 12px -4px rgb(0 0 0 / 0.12);
+    opacity: var(--o, 0);
+    transform: translate3d(var(--x, 0px), -50%, 0);
+    transition:
+      transform 560ms var(--ease-out),
+      width 560ms var(--ease-out),
+      opacity 300ms var(--ease-out);
+  }
+
+  :global([data-theme='dark']) .nav-indicator {
+    --indicator-bg: rgb(255 255 255 / 0.1);
+  }
+
+  /* Actions */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 4px;
+    padding-left: 6px;
+    border-left: 1px solid var(--line);
+  }
+
+  .menu-btn {
+    display: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    transition: background-color var(--dur) var(--ease-out);
+  }
+
+  .menu-btn:hover {
+    background: var(--line);
+  }
+
+  .menu-icon {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 10px;
+  }
+
+  .menu-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.6px;
+    border-radius: 2px;
+    background: currentColor;
+    transition:
+      transform 480ms var(--ease-out),
+      top 480ms var(--ease-out);
+  }
+
+  .menu-icon span:first-child {
+    top: 0;
+  }
+
+  .menu-icon span:last-child {
+    top: calc(100% - 1.6px);
+  }
+
+  .menu-btn[aria-expanded='true'] .menu-icon span:first-child {
+    top: calc(50% - 0.8px);
+    transform: rotate(45deg);
+  }
+
+  .menu-btn[aria-expanded='true'] .menu-icon span:last-child {
+    top: calc(50% - 0.8px);
+    transform: rotate(-45deg);
+  }
+
+  /* Mobile sheet */
+  .mobile-menu {
+    pointer-events: auto;
+    position: fixed;
+    top: calc(max(14px, env(safe-area-inset-top)) + var(--nav-h) + 10px);
+    left: 12px;
+    right: 12px;
+    max-width: 560px;
+    margin-inline: auto;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    --glass-tint-top: color-mix(in srgb, var(--bg-raised) 86%, transparent);
+    --glass-tint-bottom: color-mix(in srgb, var(--bg-raised) 74%, transparent);
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    transform-origin: top center;
+    transition:
+      opacity 360ms var(--ease-out),
+      transform 520ms var(--ease-out);
+  }
+
+  .mobile-menu.is-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mobile-menu li {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 420ms var(--ease-out),
+      transform 520ms var(--ease-out);
+    transition-delay: calc(var(--i) * 40ms + 60ms);
+  }
+
+  .mobile-menu.is-open li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mobile-menu a[data-menu-link] {
+    display: block;
+    padding: 12px 16px;
+    border-radius: var(--r-md);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    transition: background-color var(--dur) var(--ease-out);
+  }
+
+  .mobile-menu a[data-menu-link]:hover,
+  .mobile-menu a[data-menu-link]:focus-visible {
+    background: var(--line);
+  }
+
+  .mobile-menu-mail {
+    display: block;
+    margin: 8px 16px 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-small);
+    color: var(--text-2);
+  }
+
+  @media (max-width: 880px) {
+    .nav {
+      width: 100%;
+      max-width: 560px;
+      justify-content: space-between;
+      padding-right: 6px;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .nav-actions {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    .menu-btn {
+      display: inline-grid;
+    }
+
+    .nav-shell.is-condensed .brand-name {
+      max-width: 8.5rem;
+      opacity: 1;
+    }
+  }
+</style>

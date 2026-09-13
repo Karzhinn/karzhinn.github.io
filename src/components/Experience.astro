@@ -1,0 +1,335 @@
+---
+import { experience } from '../data/site';
+---
+
+<section class="section experience" id="experience" aria-labelledby="experience-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow" data-reveal="up"><span class="eyebrow-index">02</span>Experience</p>
+      <h2 class="h2" id="experience-title" data-reveal="blur">Where I’ve been building.</h2>
+    </header>
+
+    <div class="timeline" data-timeline>
+      <span class="timeline-track" aria-hidden="true"><span class="timeline-fill" data-timeline-fill></span></span>
+
+      <ol class="timeline-list" role="list">
+        {
+          experience.map((item, i) => {
+            const open = Boolean(item.current);
+            return (
+              <li class:list={['tl-item', { 'is-current': item.current }]} data-tl-item data-reveal="up">
+                <span class="tl-node" aria-hidden="true" />
+                <p class="tl-period">
+                  {item.current && <span class="tl-live" aria-hidden="true" />}
+                  {item.period}
+                </p>
+                <div class="tl-body">
+                  <h3 class="tl-org">{item.org}</h3>
+                  <p class="tl-role">{item.role}</p>
+                  <p class="tl-summary">{item.summary}</p>
+
+                  <div class="tl-details" id={`experience-details-${i}`} data-open={String(open)}>
+                    <div class="tl-details-inner">
+                      <ul class="tl-points" role="list">
+                        {item.details.map((detail) => (
+                          <li>{detail}</li>
+                        ))}
+                      </ul>
+                      <ul class="tags" role="list" aria-label="Focus areas">
+                        {item.tags.map((tag) => (
+                          <li class="tag">{tag}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <button
+                    class="tl-toggle"
+                    type="button"
+                    aria-expanded={open ? 'true' : 'false'}
+                    aria-controls={`experience-details-${i}`}
+                    data-disclosure
+                  >
+                    <span data-disclosure-label>{open ? 'Show less' : 'More details'}</span>
+                    <span class="tl-toggle-icon" aria-hidden="true" />
+                  </button>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    --rail-x: 11.5rem;
+    position: relative;
+  }
+
+  .timeline-track {
+    position: absolute;
+    top: 0.9rem;
+    bottom: 0;
+    left: var(--rail-x);
+    width: 1px;
+    background: var(--line-2);
+  }
+
+  .timeline-fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--text-3), var(--text));
+    transform-origin: top;
+  }
+
+  :global(.motion) .timeline-fill {
+    transform: scaleY(0);
+  }
+
+  .tl-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--rail-x) minmax(0, 1fr);
+    padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+  }
+
+  .tl-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .tl-node {
+    position: absolute;
+    top: 0.62rem;
+    left: var(--rail-x);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    translate: -50% 0;
+    background: var(--text);
+    border: 1px solid var(--text);
+    box-shadow:
+      0 0 0 6px var(--bg),
+      0 0 0 10px color-mix(in srgb, var(--text) 8%, transparent);
+    transition:
+      background-color 500ms var(--ease-out),
+      border-color 500ms var(--ease-out),
+      box-shadow 500ms var(--ease-out),
+      scale 600ms var(--ease-spring);
+  }
+
+  :global(.motion) .tl-item:not(.is-active) .tl-node {
+    background: var(--bg);
+    border-color: var(--line-2);
+    box-shadow: 0 0 0 6px var(--bg);
+    scale: 0.85;
+  }
+
+  .tl-period {
+    align-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.55rem;
+    padding: 0.35rem 2.5rem 0 0;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    color: var(--text-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tl-live {
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--live);
+  }
+
+  .tl-live::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--live);
+    animation: live-pulse 2.6s var(--ease-out) infinite;
+  }
+
+  @keyframes live-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    70%,
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+
+  .is-current .tl-period {
+    color: var(--text);
+  }
+
+  .tl-body {
+    padding-left: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .tl-org {
+    font-size: var(--fs-h3);
+    font-weight: 620;
+    line-height: 1.1;
+    letter-spacing: -0.032em;
+  }
+
+  .tl-role {
+    margin-top: 0.45rem;
+    font-size: 1.125rem;
+    font-weight: 550;
+    letter-spacing: -0.015em;
+  }
+
+  .tl-summary {
+    max-width: 52ch;
+    margin-top: 0.8rem;
+    color: var(--text-2);
+  }
+
+  /* Expandable details: collapsed only when JS can expand them again. */
+  .tl-details {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition:
+      grid-template-rows 600ms var(--ease-out),
+      opacity 420ms var(--ease-out);
+  }
+
+  :global(.js) .tl-details[data-open='false'] {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  .tl-details-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .tl-points {
+    display: grid;
+    gap: 0.65rem;
+    max-width: 60ch;
+    margin-top: 1.4rem;
+  }
+
+  .tl-points li {
+    position: relative;
+    padding-left: 1.35rem;
+    color: var(--text-2);
+    text-wrap: pretty;
+  }
+
+  .tl-points li::before {
+    content: '';
+    position: absolute;
+    top: 0.8em;
+    left: 0;
+    width: 7px;
+    height: 1px;
+    background: var(--text-3);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .tag {
+    padding: 0.38rem 0.8rem;
+    border-radius: var(--r-pill);
+    font-size: var(--fs-micro);
+    font-weight: 550;
+    color: var(--text-2);
+    background: color-mix(in srgb, var(--bg-raised) 70%, transparent);
+    border: 1px solid var(--line);
+  }
+
+  .tl-toggle {
+    display: none;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 1.1rem 0 0 -0.95rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: var(--r-pill);
+    font-size: var(--fs-small);
+    font-weight: 560;
+    transition: background-color var(--dur) var(--ease-out);
+  }
+
+  :global(.js) .tl-toggle {
+    display: inline-flex;
+  }
+
+  .tl-toggle:hover {
+    background: var(--line);
+  }
+
+  .tl-toggle-icon {
+    position: relative;
+    width: 10px;
+    height: 10px;
+  }
+
+  .tl-toggle-icon::before,
+  .tl-toggle-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    margin-top: -0.75px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .tl-toggle-icon::after {
+    transform: rotate(90deg);
+  }
+
+  .tl-toggle[aria-expanded='true'] .tl-toggle-icon::after {
+    transform: rotate(0deg);
+  }
+
+  @media (max-width: 720px) {
+    .timeline {
+      --rail-x: 6px;
+    }
+
+    .tl-item {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tl-period {
+      justify-content: flex-start;
+      padding: 0 0 0.75rem 2.1rem;
+    }
+
+    .tl-body {
+      padding-left: 2.1rem;
+    }
+
+    .tl-node {
+      top: 0.3rem;
+    }
+
+    .timeline-track {
+      top: 0.6rem;
+    }
+  }
+</style>

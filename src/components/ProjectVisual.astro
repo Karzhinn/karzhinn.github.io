@@ -1,0 +1,781 @@
+---
+/**
+ * The large visual for each project. Zman uses the real app mockup, the
+ * e-Library uses real screenshots of the live site, and the mental health
+ * app (no public screenshots) uses an illustrative phone screen.
+ * Everything is sized in container units so each scene scales with its frame.
+ */
+import { Image } from 'astro:assets';
+import zmanPhone from '../assets/projects/zman-phone.png';
+import libraryDesktop from '../assets/projects/partukyak-desktop.png';
+import libraryMobile from '../assets/projects/partukyak-mobile.png';
+
+interface Props {
+  kind: 'zman' | 'mind' | 'library';
+}
+
+const { kind } = Astro.props;
+
+const therapists = [
+  { focus: 'Anxiety & stress', tone: 'a' },
+  { focus: 'Relationships', tone: 'b' },
+  { focus: 'Low mood', tone: 'c' },
+];
+
+const week = [
+  { day: 'M', level: 0.45 },
+  { day: 'T', level: 0.62 },
+  { day: 'W', level: 0.5 },
+  { day: 'T', level: 0.74 },
+  { day: 'F', level: 0.68 },
+  { day: 'S', level: 0.86 },
+  { day: 'S', level: 0.8 },
+];
+---
+
+{
+  kind === 'zman' && (
+    <div class="scene scene-zman">
+      <div class="glow" aria-hidden="true" />
+      <div class="device-shadow" aria-hidden="true" />
+      <Image
+        class="zman-phone"
+        src={zmanPhone}
+        alt="Zman’s home screen with daily goals, lesson progress and the first unit of lessons"
+        widths={[360, 540, 720, 960]}
+        sizes="(max-width: 640px) 52vw, 26vw"
+        data-tilt="10"
+        data-depth="0.3"
+      />
+      <ul class="stats" role="list" aria-hidden="true">
+        <li class="stat glass" data-depth="0.9">
+          <strong>100</strong>
+          <span>units</span>
+        </li>
+        <li class="stat glass" data-depth="1.25">
+          <strong>310</strong>
+          <span>lessons</span>
+        </li>
+        <li class="stat glass" data-depth="0.7">
+          <strong>1,310</strong>
+          <span>exercises</span>
+        </li>
+      </ul>
+    </div>
+  )
+}
+
+{
+  kind === 'mind' && (
+    <div class="scene scene-mind" aria-hidden="true">
+      <div class="glow" />
+      <div class="device-shadow" />
+      <div class="phone mind-phone" data-tilt="10" data-depth="0.3">
+        <div class="phone-screen mind">
+          <span class="island" />
+          <div class="m-status">
+            <span>9:41</span>
+            <span class="m-icons">
+              <i />
+              <i />
+              <i />
+            </span>
+          </div>
+          <p class="m-hello">Good evening</p>
+          <p class="m-question">How are you feeling today?</p>
+          <div class="m-moods">
+            <span class="is-on">Calm</span>
+            <span>Anxious</span>
+            <span>Low</span>
+            <span>Stressed</span>
+          </div>
+          <div class="m-week">
+            <div class="m-week-head">
+              <span>Your week</span>
+              <em>Mood</em>
+            </div>
+            <div class="m-bars">
+              {week.map((entry) => (
+                <span class="m-bar" style={`--level: ${entry.level}`}>
+                  <i />
+                  <b>{entry.day}</b>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div class="m-search">
+            <i />
+            Search therapists
+          </div>
+          <p class="m-label">Therapists for you</p>
+          {therapists.map((therapist) => (
+            <div class="m-card">
+              <span class={`m-avatar tone-${therapist.tone}`} />
+              <span class="m-lines">
+                <b />
+                <em>{therapist.focus}</em>
+              </span>
+              <span class="m-connect">Connect</span>
+            </div>
+          ))}
+          <div class="m-tabs">
+            <i class="is-on" />
+            <i />
+            <i />
+            <i />
+          </div>
+        </div>
+      </div>
+      <div class="badge glass" data-depth="1">
+        <span class="badge-dot" />
+        Flutter · Firebase
+      </div>
+    </div>
+  )
+}
+
+{
+  kind === 'library' && (
+    <div class="scene scene-library">
+      <div class="glow" aria-hidden="true" />
+      <figure class="browser" data-depth="0.2">
+        <div class="browser-bar" aria-hidden="true">
+          <span class="dots">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span class="url">partukyak.org</span>
+        </div>
+        <Image
+          class="browser-shot"
+          src={libraryDesktop}
+          alt="The e-Library home page in a desktop browser"
+          widths={[640, 960, 1280, 1600, 1920]}
+          sizes="(max-width: 640px) 88vw, 62vw"
+        />
+      </figure>
+      <div class="phone library-phone" data-tilt="8" data-depth="0.8">
+        <div class="phone-screen">
+          <span class="island" aria-hidden="true" />
+          <Image
+            class="screen-img"
+            src={libraryMobile}
+            alt="The e-Library home page on a phone"
+            widths={[240, 360, 480, 720]}
+            sizes="(max-width: 640px) 36vw, 16vw"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .scene {
+    position: absolute;
+    inset: 0;
+  }
+
+  .glow {
+    position: absolute;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .device-shadow {
+    position: absolute;
+    height: 5cqw;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--device-shadow, rgb(30 30 60 / 0.3)), transparent);
+  }
+
+  /* ---------- shared phone frame ----------
+     Width comes from --phone-w so the bezel can be a fraction of the phone
+     itself (percentage padding would be relative to the whole panel). */
+  .phone {
+    position: absolute;
+    container-type: inline-size;
+    width: var(--phone-w);
+    aspect-ratio: 1530 / 3036;
+    padding: calc(var(--phone-w) * 0.034);
+    border-radius: 16% / 8%;
+    background: linear-gradient(150deg, #3a3c42, #0c0d0f 55%, #2c2d32);
+    box-shadow:
+      inset 0 0 0 0.22cqw rgb(255 255 255 / 0.18),
+      0 2.4cqw 5cqw -2cqw rgb(15 20 40 / 0.5);
+    transform-origin: 50% 60%;
+  }
+
+  .phone-screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 12.6% / 6.2%;
+    background: #f5faf8;
+  }
+
+  .island {
+    position: absolute;
+    top: 2.2%;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    width: 31%;
+    height: 3.6%;
+    margin-inline: auto;
+    border-radius: 99px;
+    background: #050505;
+  }
+
+  /* ---------- Zman ---------- */
+  .scene-zman .glow {
+    top: -4cqw;
+    left: 33cqw;
+    width: 62cqw;
+    background: radial-gradient(closest-side, rgb(118 88 255 / 0.42), rgb(118 88 255 / 0.1) 55%, transparent);
+  }
+
+  .scene-zman .device-shadow {
+    top: 51.5cqw;
+    left: 52.5cqw;
+    width: 24cqw;
+    --device-shadow: rgb(50 30 130 / 0.32);
+  }
+
+  .zman-phone {
+    position: absolute;
+    top: 2.6cqw;
+    left: 51.5cqw;
+    width: 25.5cqw;
+    height: auto;
+    transform-origin: 50% 60%;
+  }
+
+  .stats {
+    position: absolute;
+    top: 10.5cqw;
+    left: 13cqw;
+    display: grid;
+    justify-items: start;
+    gap: 1.6cqw;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stat {
+    display: grid;
+    gap: 0.35cqw;
+    min-width: 16cqw;
+    padding: 1.5cqw 2.2cqw;
+    border-radius: 2cqw;
+    --glass-blur: 16px;
+  }
+
+  .stat:nth-child(2) {
+    margin-left: 5cqw;
+  }
+
+  .stat:nth-child(3) {
+    margin-left: 1.5cqw;
+  }
+
+  .stat strong {
+    font-size: 3.5cqw;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: var(--text);
+  }
+
+  .stat span {
+    font-size: 1.25cqw;
+    font-weight: 560;
+    color: var(--text-2);
+  }
+
+  /* ---------- Mental health (illustrative screen) ---------- */
+  .scene-mind .glow {
+    top: -2cqw;
+    left: 22cqw;
+    width: 56cqw;
+    background: radial-gradient(closest-side, rgb(60 168 146 / 0.32), rgb(60 168 146 / 0.08) 55%, transparent);
+  }
+
+  .scene-mind .device-shadow {
+    top: 51.5cqw;
+    left: 38cqw;
+    width: 24cqw;
+    --device-shadow: rgb(20 70 60 / 0.3);
+  }
+
+  .mind-phone {
+    --phone-w: 25.5cqw;
+    top: 2.6cqw;
+    left: 37.25cqw;
+  }
+
+  .mind {
+    padding: 18% 7% 0;
+    font-size: 4.3cqw;
+    color: #14302b;
+  }
+
+  .m-status {
+    position: absolute;
+    top: 3.4%;
+    left: 9%;
+    right: 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78em;
+    font-weight: 650;
+  }
+
+  .m-icons {
+    display: flex;
+    gap: 0.3em;
+  }
+
+  .m-icons i {
+    width: 0.9em;
+    height: 0.55em;
+    border-radius: 0.15em;
+    background: #14302b;
+    opacity: 0.85;
+  }
+
+  .m-hello {
+    font-size: 0.82em;
+    font-weight: 550;
+    color: #5f7a74;
+  }
+
+  .m-question {
+    margin-top: 0.2em;
+    font-size: 1.42em;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .m-moods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-top: 0.9em;
+  }
+
+  .m-moods span {
+    padding: 0.35em 0.75em;
+    border-radius: 99em;
+    font-size: 0.74em;
+    font-weight: 600;
+    color: #3d5a54;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgb(20 48 43 / 0.08);
+  }
+
+  .m-moods .is-on {
+    color: #fff;
+    background: #2f8f7f;
+    box-shadow: none;
+  }
+
+  .m-week {
+    margin-top: 1em;
+    padding: 0.8em 0.9em 0.7em;
+    border-radius: 1em;
+    background: #fff;
+    box-shadow: 0 0.3em 0.9em -0.4em rgb(20 48 43 / 0.2);
+  }
+
+  .m-week-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78em;
+    font-weight: 700;
+  }
+
+  .m-week-head em {
+    font-style: normal;
+    font-weight: 550;
+    color: #7c948f;
+  }
+
+  .m-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 3.6em;
+    margin-top: 0.6em;
+  }
+
+  .m-bar {
+    display: grid;
+    align-content: end;
+    justify-items: center;
+    gap: 0.3em;
+    width: 11%;
+    height: 100%;
+  }
+
+  .m-bar i {
+    width: 100%;
+    height: calc(var(--level) * 2.6em);
+    border-radius: 0.35em;
+    background: linear-gradient(to top, #a7d8cc, #2f8f7f);
+  }
+
+  .m-bar b {
+    font-size: 0.6em;
+    font-weight: 600;
+    color: #7c948f;
+  }
+
+  .m-search {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    margin-top: 1.1em;
+    padding: 0.75em 0.9em;
+    border-radius: 0.9em;
+    font-size: 0.8em;
+    color: #7c948f;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgb(20 48 43 / 0.06);
+  }
+
+  .m-search i {
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 50%;
+    border: 0.15em solid #7c948f;
+  }
+
+  .m-label {
+    margin-top: 1.2em;
+    font-size: 0.9em;
+    font-weight: 700;
+  }
+
+  .m-card {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    margin-top: 0.6em;
+    padding: 0.7em;
+    border-radius: 1em;
+    background: #fff;
+    box-shadow: 0 0.3em 0.9em -0.4em rgb(20 48 43 / 0.25);
+  }
+
+  .m-avatar {
+    flex: none;
+    width: 2.4em;
+    height: 2.4em;
+    border-radius: 50%;
+  }
+
+  .tone-a {
+    background: linear-gradient(145deg, #bfe3da, #5fae9d);
+  }
+
+  .tone-b {
+    background: linear-gradient(145deg, #f3d9c9, #d99a7a);
+  }
+
+  .tone-c {
+    background: linear-gradient(145deg, #d5d8f2, #8b93cf);
+  }
+
+  .m-lines {
+    display: grid;
+    flex: 1;
+    gap: 0.35em;
+    min-width: 0;
+  }
+
+  .m-lines b {
+    display: block;
+    width: 70%;
+    height: 0.6em;
+    border-radius: 99em;
+    background: #d6e3e0;
+  }
+
+  .m-lines em {
+    overflow: hidden;
+    font-size: 0.72em;
+    font-style: normal;
+    color: #5f7a74;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .m-connect {
+    flex: none;
+    padding: 0.45em 0.8em;
+    border-radius: 99em;
+    font-size: 0.7em;
+    font-weight: 650;
+    color: #fff;
+    background: #14302b;
+  }
+
+  .m-tabs {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 3.5%;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.9em 0;
+    border-radius: 1.4em;
+    background: #fff;
+    box-shadow: 0 0.4em 1.2em -0.5em rgb(20 48 43 / 0.25);
+  }
+
+  .m-tabs i {
+    width: 1.1em;
+    height: 1.1em;
+    border-radius: 0.35em;
+    background: #c9d8d4;
+  }
+
+  .m-tabs .is-on {
+    background: #2f8f7f;
+  }
+
+  .badge {
+    position: absolute;
+    left: 12cqw;
+    bottom: 12cqw;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8cqw;
+    padding: 1.1cqw 1.8cqw;
+    border-radius: 99px;
+    font-size: 1.35cqw;
+    font-weight: 600;
+    color: var(--text);
+    --glass-blur: 16px;
+  }
+
+  .badge-dot {
+    width: 0.9cqw;
+    height: 0.9cqw;
+    border-radius: 50%;
+    background: #3aa58f;
+    box-shadow: 0 0 0 0.4cqw rgb(58 165 143 / 0.22);
+  }
+
+  /* ---------- e-Library (real screenshots) ---------- */
+  .scene-library .glow {
+    top: -12cqw;
+    left: 8cqw;
+    width: 72cqw;
+    background: radial-gradient(closest-side, rgb(168 96 222 / 0.26), rgb(168 96 222 / 0.06) 55%, transparent);
+  }
+
+  .browser {
+    position: absolute;
+    top: 6.5cqw;
+    left: 7cqw;
+    width: 62cqw;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 1.2cqw;
+    background: #fff;
+    box-shadow:
+      0 0 0 1px var(--line),
+      0 2.5cqw 5cqw -2cqw rgb(40 20 60 / 0.35);
+  }
+
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 1cqw;
+    height: 2.6cqw;
+    padding: 0 1.1cqw;
+    background: #f1f1f4;
+    border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  }
+
+  .dots {
+    display: flex;
+    gap: 0.5cqw;
+  }
+
+  .dots i {
+    width: 0.75cqw;
+    height: 0.75cqw;
+    border-radius: 50%;
+    background: #d4d4da;
+  }
+
+  .url {
+    margin-inline: auto;
+    padding: 0.3cqw 2.6cqw;
+    border-radius: 99px;
+    font-size: 0.95cqw;
+    color: #6b6b75;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.05);
+  }
+
+  :global([data-theme='dark']) .browser-bar {
+    background: #232327;
+    border-bottom-color: rgb(255 255 255 / 0.06);
+  }
+
+  :global([data-theme='dark']) .dots i {
+    background: #45454c;
+  }
+
+  :global([data-theme='dark']) .url {
+    color: #a1a1aa;
+    background: #18181b;
+  }
+
+  .browser-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .library-phone {
+    --phone-w: 22cqw;
+    top: 8.5cqw;
+    left: 66.5cqw;
+  }
+
+  .screen-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  /* ---------- phones: taller frame, bigger devices ---------- */
+  @container (max-width: 640px) {
+    .scene-zman .glow {
+      top: 4cqw;
+      left: 12cqw;
+      width: 110cqw;
+    }
+
+    .scene-zman .device-shadow {
+      top: 110cqw;
+      left: 44cqw;
+      width: 46cqw;
+      height: 9cqw;
+    }
+
+    .zman-phone {
+      top: 9cqw;
+      left: 43cqw;
+      width: 50cqw;
+    }
+
+    .stats {
+      top: 24cqw;
+      left: 6cqw;
+      gap: 3cqw;
+    }
+
+    .stat {
+      min-width: 30cqw;
+      padding: 3cqw 4cqw;
+      border-radius: 4cqw;
+    }
+
+    .stat:nth-child(2) {
+      margin-left: 4cqw;
+    }
+
+    .stat:nth-child(3) {
+      margin-left: 1cqw;
+    }
+
+    .stat strong {
+      font-size: 7cqw;
+    }
+
+    .stat span {
+      font-size: 2.8cqw;
+    }
+
+    .scene-mind .glow {
+      top: 6cqw;
+      left: -5cqw;
+      width: 110cqw;
+    }
+
+    .scene-mind .device-shadow {
+      top: 112cqw;
+      left: 27cqw;
+      width: 46cqw;
+      height: 9cqw;
+    }
+
+    .mind-phone {
+      --phone-w: 52cqw;
+      top: 9cqw;
+      left: 24cqw;
+    }
+
+    .badge {
+      left: 6cqw;
+      bottom: 7cqw;
+      gap: 1.6cqw;
+      padding: 2cqw 3.4cqw;
+      font-size: 3cqw;
+    }
+
+    .badge-dot {
+      width: 1.8cqw;
+      height: 1.8cqw;
+    }
+
+    .scene-library .glow {
+      top: 0;
+      left: -10cqw;
+      width: 120cqw;
+    }
+
+    .browser {
+      top: 14cqw;
+      left: 6cqw;
+      width: 88cqw;
+      border-radius: 2.4cqw;
+    }
+
+    .browser-bar {
+      gap: 2cqw;
+      height: 5.6cqw;
+      padding: 0 2.4cqw;
+    }
+
+    .dots i {
+      width: 1.6cqw;
+      height: 1.6cqw;
+    }
+
+    .url {
+      padding: 0.6cqw 5cqw;
+      font-size: 2.2cqw;
+    }
+
+    .library-phone {
+      --phone-w: 35cqw;
+      top: 52cqw;
+      left: 57cqw;
+    }
+  }
+</style>

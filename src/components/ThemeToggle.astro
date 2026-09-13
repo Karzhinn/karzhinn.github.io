@@ -1,0 +1,78 @@
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark theme">
+  <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <defs>
+      <mask id="theme-moon-mask">
+        <rect x="0" y="0" width="24" height="24" fill="#fff"></rect>
+        <circle class="moon-cut" cx="25" cy="3" r="6.5" fill="#000"></circle>
+      </mask>
+    </defs>
+    <circle class="sun-core" cx="12" cy="12" r="4.6" fill="currentColor" mask="url(#theme-moon-mask)"></circle>
+    <g class="sun-rays" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+      <line x1="12" y1="2" x2="12" y2="3.6"></line>
+      <line x1="12" y1="20.4" x2="12" y2="22"></line>
+      <line x1="2" y1="12" x2="3.6" y2="12"></line>
+      <line x1="20.4" y1="12" x2="22" y2="12"></line>
+      <line x1="4.93" y1="4.93" x2="6.06" y2="6.06"></line>
+      <line x1="17.94" y1="17.94" x2="19.07" y2="19.07"></line>
+      <line x1="4.93" y1="19.07" x2="6.06" y2="17.94"></line>
+      <line x1="17.94" y1="6.06" x2="19.07" y2="4.93"></line>
+    </g>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--text);
+    transition:
+      background-color var(--dur) var(--ease-out),
+      transform 520ms var(--ease-spring);
+  }
+
+  .theme-toggle:hover {
+    background: var(--line);
+  }
+
+  .theme-toggle:active {
+    transform: scale(0.9);
+  }
+
+  .theme-icon {
+    overflow: visible;
+  }
+
+  .sun-core {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 620ms var(--ease-spring);
+  }
+
+  .moon-cut {
+    transition: transform 620ms var(--ease-out);
+  }
+
+  .sun-rays {
+    transform-origin: 12px 12px;
+    transition:
+      transform 620ms var(--ease-spring),
+      opacity 300ms var(--ease-out);
+  }
+
+  :global([data-theme='dark']) .sun-core {
+    transform: scale(1.62);
+  }
+
+  :global([data-theme='dark']) .moon-cut {
+    transform: translate(-8.5px, 5px);
+  }
+
+  :global([data-theme='dark']) .sun-rays {
+    transform: rotate(-60deg) scale(0.4);
+    opacity: 0;
+  }
+</style>

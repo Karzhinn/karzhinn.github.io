@@ -1,0 +1,116 @@
+---
+import { site, socials } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-id">
+      <p class="footer-name">{site.name}</p>
+      <p class="footer-role">{site.role}</p>
+    </div>
+
+    <ul class="footer-links" role="list">
+      {
+        socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              {...(social.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {social.label}
+              {social.external && <span class="visually-hidden">(opens in a new tab)</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="footer-meta">
+      <p>© {year} {site.name}. Designed &amp; built by hand.</p>
+      <a class="back-top" href="#top">
+        Back to top
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 12.5v-9m0 0L4 7.5m4-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: 1;
+    padding-block: 2.75rem calc(2.75rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-small);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1.75rem 3rem;
+  }
+
+  .footer-name {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .footer-role {
+    color: var(--text-2);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.75rem;
+  }
+
+  .footer-links a,
+  .back-top {
+    color: var(--text-2);
+    transition: color var(--dur) var(--ease-out);
+  }
+
+  .footer-links a:hover,
+  .back-top:hover {
+    color: var(--text);
+  }
+
+  .footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    color: var(--text-3);
+  }
+
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .back-top svg {
+    width: 0.95em;
+    height: 0.95em;
+    transition: translate var(--dur) var(--ease-out);
+  }
+
+  .back-top:hover svg {
+    translate: 0 -2px;
+  }
+
+  @media (max-width: 880px) {
+    .footer-inner {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: start;
+    }
+
+    .footer-meta {
+      justify-content: flex-start;
+    }
+  }
+</style>

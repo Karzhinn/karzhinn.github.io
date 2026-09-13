@@ -1,0 +1,182 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="contact-halo" aria-hidden="true" data-halo></div>
+
+  <div class="container contact-inner">
+    <p class="eyebrow" data-reveal="up"><span class="eyebrow-index">07</span>Contact</p>
+
+    <h2 class="contact-title" id="contact-title">
+      <span class="line-mask"><span data-line>Let’s build</span></span>
+      <span class="line-mask"><span class="metal-text" data-line>something meaningful.</span></span>
+    </h2>
+
+    <p class="lead contact-lead" data-reveal="up">
+      Have a project, a role, or an idea worth building? I’d love to hear about it.
+    </p>
+
+    <div class="contact-actions" data-reveal="up">
+      <a class="btn btn-solid btn-lg" href={`mailto:${site.email}`} data-magnetic>
+        {site.email}
+        <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M4 10h11m0 0-4.5-4.5M15 10l-4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+      <button class="btn btn-glass glass btn-lg copy-btn" type="button" data-copy-email={site.email} data-magnetic>
+        <svg class="copy-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <rect x="6.5" y="6.5" width="9" height="9" rx="2.2" stroke="currentColor" stroke-width="1.5"></rect>
+          <path d="M13 4.5H6.7A2.2 2.2 0 0 0 4.5 6.7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+        <span data-copy-label>Copy email</span>
+      </button>
+      <span class="visually-hidden" aria-live="polite" data-copy-status></span>
+    </div>
+
+    <ul class="contact-links" role="list" data-reveal="up">
+      <li>
+        <a class="contact-link" href={site.links.github} target="_blank" rel="noopener noreferrer">
+          GitHub
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 11 11 5m0 0H6m5 0v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="visually-hidden">(opens in a new tab)</span>
+        </a>
+      </li>
+      <li>
+        <a class="contact-link" href={site.links.linkedin} target="_blank" rel="noopener noreferrer">
+          LinkedIn
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 11 11 5m0 0H6m5 0v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="visually-hidden">(opens in a new tab)</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact {
+    overflow: clip;
+    padding-bottom: clamp(6rem, 12vw, 10rem);
+  }
+
+  .contact-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: min(1100px, 130vw);
+    aspect-ratio: 1.5;
+    translate: -50% -50%;
+    background: radial-gradient(closest-side, var(--halo), transparent);
+    pointer-events: none;
+  }
+
+  .contact {
+    --halo: rgb(210 216 232 / 0.55);
+  }
+
+  :global([data-theme='dark']) .contact {
+    --halo: rgb(80 88 110 / 0.28);
+  }
+
+  .contact-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-title {
+    margin-top: 1.75rem;
+    font-size: clamp(3rem, 0.9rem + 8.6vw, 9.75rem);
+    font-weight: 640;
+    line-height: 0.94;
+    letter-spacing: -0.056em;
+    text-wrap: balance;
+  }
+
+  .contact-lead {
+    max-width: 34ch;
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: clamp(2.25rem, 4vw, 3rem);
+  }
+
+  .btn-lg {
+    min-height: 60px;
+    padding: 0 1.75rem;
+    font-size: 1.0625rem;
+  }
+
+  .copy-icon {
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 2.25rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .contact-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block: 0.35rem;
+    font-weight: 560;
+    color: var(--text-2);
+    transition: color var(--dur) var(--ease-out);
+  }
+
+  .contact-link svg {
+    width: 0.95em;
+    height: 0.95em;
+    transition: translate var(--dur) var(--ease-out);
+  }
+
+  .contact-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .contact-link:hover {
+    color: var(--text);
+  }
+
+  .contact-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .contact-link:hover svg {
+    translate: 2px -2px;
+  }
+
+  @media (max-width: 520px) {
+    .contact-actions {
+      flex-direction: column;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .btn-lg {
+      font-size: 1rem;
+    }
+  }
+</style>
