@@ -54,7 +54,7 @@ function heroIntro() {
     .timeline({ defaults: { ease: 'expo.out' } })
     .fromTo('.hero-bg', { opacity: 0 }, { opacity: 1, duration: 2.4, ease: 'power2.out' }, 0)
     .fromTo('[data-nav] .nav', { y: -18, opacity: 0 }, { y: 0, opacity: 1, duration: 1.4 }, 0.3)
-    .fromTo(lines, { y: 0, yPercent: 105 }, { yPercent: 0, duration: 1.6, stagger: 0.1 }, 0.15)
+    .fromTo(lines, { y: 0, yPercent: 130 }, { yPercent: 0, duration: 1.6, stagger: 0.1 }, 0.15)
     .fromTo(
       items,
       { opacity: 0, y: 18, filter: 'blur(8px)' },
@@ -128,7 +128,7 @@ function reveals() {
     start: 'top 90%',
     once: true,
     onEnter: (batch) =>
-      gsap.fromTo(batch, { y: 0, yPercent: 105 }, { yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: 0.12 }),
+      gsap.fromTo(batch, { y: 0, yPercent: 130 }, { yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: 0.12 }),
   });
 }
 

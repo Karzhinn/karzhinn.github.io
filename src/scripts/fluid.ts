@@ -86,7 +86,9 @@ export function startFluidCursor(canvas: HTMLCanvasElement): (() => void) | null
     halfFloatTexType = halfFloat.HALF_FLOAT_OES;
   }
 
-  gl.clearColor(0, 0, 0, 1);
+  // Transparent, never opaque: this canvas sits behind the page content, so an
+  // opaque clear would paint a black layer over the page background.
+  gl.clearColor(0, 0, 0, 0);
 
   function supportRenderTextureFormat(internalFormat: number, format: number, type: number) {
     const texture = gl.createTexture();
@@ -436,7 +438,7 @@ export function startFluidCursor(canvas: HTMLCanvasElement): (() => void) | null
       gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo);
     }
     if (clear) {
-      gl.clearColor(0, 0, 0, 1);
+      gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
     }
     gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
@@ -829,9 +831,12 @@ export function startFluidCursor(canvas: HTMLCanvasElement): (() => void) | null
     step(dt);
     render();
 
-    // Let the dye fully dissipate, then sleep until the pointer moves again.
+    // Let the dye fully dissipate, then sleep until the pointer moves again,
+    // leaving the visible canvas fully transparent.
     if (now - lastInputTime > config.IDLE_TIMEOUT) {
       running = false;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       return;
     }
