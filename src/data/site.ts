@@ -122,8 +122,8 @@ export type Project = {
   id: 'zman' | 'mind' | 'library';
   index: string;
   kind: 'Mobile app' | 'Website';
-  /** Short label shown on the visual. */
-  label: string;
+  /** Short label shown on the visual. Omit for no label. */
+  label?: string;
   title: string;
   tagline: string;
   description: string;
@@ -137,7 +137,6 @@ export const projects: Project[] = [
     id: 'zman',
     index: '01',
     kind: 'Mobile app',
-    label: 'Coming soon to Android & iOS',
     title: 'Zman',
     tagline: 'English lessons in your own language.',
     description:

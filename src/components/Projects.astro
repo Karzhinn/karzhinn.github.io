@@ -20,7 +20,7 @@ import ProjectVisual from './ProjectVisual.astro';
         <article class={`project project-${project.id}`} aria-labelledby={`project-${project.id}-title`}>
           <div class="project-visual" data-project-visual data-cursor="card">
             <ProjectVisual kind={project.id} />
-            <span class="project-chip glass">{project.label}</span>
+            {project.label && <span class="project-chip glass">{project.label}</span>}
           </div>
 
           <div class="project-info">
